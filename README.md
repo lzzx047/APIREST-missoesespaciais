@@ -1,64 +1,89 @@
+API de Missões Espaciais
 
+1. Identificação
 
-## 1. Identificação
+Aluno: Luiz Fernando Marques
 
-- **Aluno:** _(LUIZ FERNANDO MARQUES )_
-- **Curso:** _(TEC INFORMATICA PARA INTERNET)_
-- **Unidade Curricular:** Desenvolver Serviços Web
+Curso: Técnico em Informática para Internet
 
-## 2. Descrição do Projeto
+Unidade Curricular: Desenvolver Serviços Web
 
-API REST em Node.js/Express para cadastrar, consultar, atualizar e remover missões espaciais (dados em memória), com consulta à foto astronômica do dia da NASA (APOD), testes automatizados com Jest e Supertest e documentação interativa em Swagger (OpenAPI 3.0).
+2. Sobre o projeto
 
-## 3. Tecnologias Utilizadas
+Este projeto foi desenvolvido para praticar a criação de uma API REST usando Node.js e Express.
 
-- Node.js
-- Express
-- Jest
-- Supertest
-- Swagger (swagger-ui-express e swagger-jsdoc)
-- JSON
-- Axios (consumo da API APOD da NASA)
-- dotenv (variáveis de ambiente)
+A API permite cadastrar, consultar, atualizar e excluir missões espaciais. Os dados das missões ficam armazenados em memória, ou seja, não são salvos em um banco de dados.
 
-## 4. Como Clonar o Projeto
+Também foi adicionada uma rota que consulta a foto astronômica do dia da NASA (APOD). O projeto conta com testes automatizados usando Jest e Supertest e uma documentação dos endpoints feita com Swagger.
 
-```bash
+3. Tecnologias utilizadas
+
+As principais tecnologias e ferramentas utilizadas foram:
+
+Node.js: execução do JavaScript no servidor.
+
+Express: criação das rotas da API.
+
+Jest: execução dos testes automatizados.
+
+Supertest: testes das requisições HTTP.
+
+Swagger: documentação da API.
+
+JSON: formato dos dados enviados e recebidos.
+
+Axios: comunicação com a API da NASA.
+
+dotenv: configuração das variáveis de ambiente.
+
+4. Como baixar o projeto
+
+Para baixar o projeto, abra o terminal e execute os comandos abaixo. Substitua a URL pelo endereço do repositório no GitHub.
+
 git clone URL_DO_REPOSITORIO
 cd NOME_DO_REPOSITORIO
-```
 
-## 5. Como Instalar as Dependências
+5. Instalando as dependências
 
-```bash
+Depois de entrar na pasta do projeto, execute:
+
 npm install
-```
 
-## 6. Como Executar o Projeto
+Esse comando instala os pacotes necessários para o funcionamento da API.
 
-Antes de executar, copie `.env.example` para `.env` e informe a `NASA_API_KEY` (chave gratuita em https://api.nasa.gov). Sem a chave, a API usa `DEMO_KEY`, com limite de uso reduzido.
+6. Como executar a API
 
-```bash
-cp .env.example .env
+Antes de iniciar, é necessário configurar a chave de acesso da NASA.
+
+Crie um arquivo .env com base no .env.example e informe sua chave na variável NASA_API_KEY. A chave gratuita pode ser obtida no site NASA API.
+
+Caso não tenha uma chave própria, o projeto utiliza a DEMO_KEY, que possui um limite menor de requisições.
+
+Com tudo configurado, inicie o servidor:
+
 npm start
-```
 
-- API: http://localhost:3000
-- Swagger UI: http://localhost:3000/api-docs
+Depois de iniciar, os endereços para acessar o projeto são:
 
-### Estrutura de pastas
+API: http://localhost:3000
 
-```
+Documentação Swagger: http://localhost:3000/api-docs
+
+Estrutura de pastas
+
 .
 ├── src/
-│   ├── app.js                    # criação do app Express (sem abrir porta)
-│   ├── server.js                 # inicialização do servidor
-│   ├── data/missoes.js           # array em memória + função resetar()
+│   ├── app.js
+│   ├── server.js
+│   ├── data/
+│   │   └── missoes.js
 │   ├── routes/
-│   │   ├── missoes.routes.js     # CRUD de missões
-│   │   └── apod.routes.js        # rota /apod
-│   ├── services/nasa.service.js  # chamada ao axios isolada
-│   └── docs/swagger.js           # configuração OpenAPI
+│   │   ├── missoes.routes.js
+│   │   └── apod.routes.js
+│   ├── services/
+│   │   └── nasa.service.js
+│   └── docs/
+│       └── swagger.js
 ├── tests/
 │   ├── missoes.test.js
 │   └── apod.test.js
@@ -66,84 +91,139 @@ npm start
 ├── .gitignore
 ├── package.json
 └── README.md
-```
 
-## 7. Como Executar os Testes
+Cada arquivo tem uma função no projeto. As rotas cuidam das requisições, o serviço da NASA faz a comunicação com a API externa e a pasta tests contém os testes automatizados.
 
-```bash
+7. Executando os testes
+
+Para executar os testes, utilize o comando:
+
 npm test
-```
 
-Os testes (Jest + Supertest) cobrem:
+Os testes verificam se as rotas estão funcionando corretamente, incluindo situações em que uma requisição dá certo ou apresenta algum erro.
 
-- `GET /status`, e o CRUD de `/missoes` com cenários de sucesso e erro (200, 201, 204, 400, 404), além de verificar o `Content-Type` JSON;
-- rota inexistente retornando 404 em JSON e Swagger UI em `/api-docs`;
-- `GET /apod` com `axios` simulado via `jest.mock('axios')`: sucesso, repasse de `date`, `date` inválido sem chamar o axios, 400/429 da NASA, 502 (rede ou resposta inválida) e 504 (timeout `ECONNABORTED`).
+Entre os cenários testados estão:
 
-Cada teste é independente: `beforeEach` restaura o array de missões ao estado inicial.
+Verificação do funcionamento da API pela rota /status.
 
-## 8. Documentação dos Endpoints
+Cadastro, consulta, atualização e exclusão de missões.
 
-Todas as respostas de erro seguem o formato `{ "erro": "mensagem" }`.
+Validação dos dados enviados nas requisições.
 
-### GET /status
-- **Objetivo:** verificar o funcionamento da API.
-- **Resposta:** `{ "status": "ok" }`
-- **Status:** 200
+Respostas para missões que não existem e rotas inválidas.
 
-### GET /missoes
-- **Objetivo:** listar todas as missões.
-- **Requisição:** `GET /missoes`
-- **Resposta:**
-```json
-[{ "id": 1, "nome": "Apollo 11", "ano": 1969, "agencia": "NASA", "status": "Concluída" }]
-```
-- **Status:** 200
+Retorno dos dados no formato JSON.
 
-### GET /missoes/{id}
-- **Objetivo:** buscar uma missão pelo ID.
-- **Requisição:** `GET /missoes/1`
-- **Resposta:**
-```json
-{ "id": 1, "nome": "Apollo 11", "ano": 1969, "agencia": "NASA", "status": "Concluída" }
-```
-- **Status:** 200, 404
+Funcionamento da documentação Swagger.
 
-### POST /missoes
-- **Objetivo:** cadastrar uma nova missão (todos os campos obrigatórios; `ano` deve ser inteiro).
-- **Requisição:**
-```json
-{ "nome": "Artemis III", "ano": 2027, "agencia": "NASA", "status": "Planejada" }
-```
-- **Resposta:**
-```json
-{ "id": 7, "nome": "Artemis III", "ano": 2027, "agencia": "NASA", "status": "Planejada" }
-```
-- **Status:** 201, 400
+Consulta à API da NASA, incluindo erros de conexão, datas inválidas, limite de requisições e tempo de espera excedido.
 
-### PUT /missoes/{id}
-- **Objetivo:** atualizar uma missão existente.
-- **Requisição:** `PUT /missoes/3`
-```json
-{ "nome": "Artemis III", "ano": 2027, "agencia": "NASA", "status": "Em preparação" }
-```
-- **Resposta:**
-```json
-{ "id": 3, "nome": "Artemis III", "ano": 2027, "agencia": "NASA", "status": "Em preparação" }
-```
-- **Status:** 200, 400, 404
+Nos testes da rota /apod, o Axios é simulado para que seja possível verificar as respostas sem depender de uma chamada real à NASA.
 
-### DELETE /missoes/{id}
-- **Objetivo:** remover uma missão.
-- **Requisição:** `DELETE /missoes/2`
-- **Resposta:** sem corpo.
-- **Status:** 204, 404
+Também é feita uma restauração dos dados das missões antes de cada teste, evitando que um teste interfira no resultado de outro.
 
-### GET /apod
-- **Objetivo:** foto astronômica do dia (NASA APOD). A chamada é feita pelo servidor e a chave nunca é exposta.
-- **Parâmetro opcional:** `date` (`YYYY-MM-DD`). Exemplos: `GET /apod` e `GET /apod?date=2024-01-15`
-- **Resposta:**
-```json
+8. Endpoints da API
+
+Abaixo estão as rotas disponíveis e suas principais funções.
+
+As respostas de erro seguem o formato:
+
+{
+  "erro": "mensagem"
+}
+
+GET /status
+
+Verifica se a API está funcionando.
+
+Resposta esperada:
+
+{
+  "status": "ok"
+}
+
+Código HTTP: 200
+
+GET /missoes
+
+Retorna a lista de missões cadastradas.
+
+Exemplo de resposta:
+
+[
+  {
+    "id": 1,
+    "nome": "Apollo 11",
+    "ano": 1969,
+    "agencia": "NASA",
+    "status": "Concluída"
+  }
+]
+
+Código HTTP: 200
+
+GET /missoes/{id}
+
+Busca uma missão pelo seu ID.
+
+Exemplo de requisição: GET /missoes/1
+
+Código HTTP: 200 se a missão for encontrada ou 404 se ela não existir.
+
+POST /missoes
+
+Cadastra uma nova missão. Todos os campos são obrigatórios, e o ano precisa ser um número inteiro.
+
+Exemplo de corpo da requisição:
+
+{
+  "nome": "Artemis III",
+  "ano": 2027,
+  "agencia": "NASA",
+  "status": "Planejada"
+}
+
+Código HTTP: 201 se o cadastro for realizado ou 400 se os dados forem inválidos.
+
+PUT /missoes/{id}
+
+Atualiza os dados de uma missão existente.
+
+Exemplo de requisição: PUT /missoes/3
+
+{
+  "nome": "Artemis III",
+  "ano": 2027,
+  "agencia": "NASA",
+  "status": "Em preparação"
+}
+
+Código HTTP: 200 se a atualização der certo, 400 para dados inválidos ou 404 se a missão não existir.
+
+DELETE /missoes/{id}
+
+Remove uma missão pelo ID.
+
+Exemplo de requisição: DELETE /missoes/2
+
+Se a exclusão for realizada, a API retorna uma resposta sem conteúdo.
+
+Código HTTP: 204 se a missão for removida ou 404 se ela não existir.
+
+GET /apod
+
+Consulta a foto astronômica do dia disponibilizada pela NASA.
+
+A rota também aceita o parâmetro opcional date, para consultar uma data específica no formato AAAA-MM-DD.
+
+Exemplos de requisição:
+
+GET /apod
+
+GET /apod?date=2024-01-15
+
+Exemplo de resposta:
+
 {
   "date": "2024-01-15",
   "title": "Título da imagem",
@@ -153,19 +233,37 @@ Todas as respostas de erro seguem o formato `{ "erro": "mensagem" }`.
   "hdurl": "https://apod.nasa.gov/apod/image/exemplo_hd.jpg",
   "copyright": "Nome do autor"
 }
-```
-(`hdurl` e `copyright` são omitidos quando a NASA não os envia.)
-- **Status:** 200, 400, 429, 502, 504
 
-### GET /api-docs
-- **Objetivo:** Swagger UI com todos os endpoints documentados.
+Os campos hdurl e copyright podem não aparecer na resposta, dependendo dos dados enviados pela NASA.
 
-## 9. Evidências
+A chave de acesso fica no servidor e não é enviada diretamente ao usuário.
 
-### Testes (`npm test`)
+Códigos HTTP: 200 para sucesso, 400 para data inválida, 429 para limite de requisições, 502 para falhas na comunicação ou respostas inválidas e 504 para tempo de espera excedido.
 
-_(inserir captura de tela aqui: `docs/evidencias/npm-test.png`)_
+GET /api-docs
 
-### Swagger UI (`/api-docs`)
+Abre a documentação interativa da API, onde é possível consultar as rotas e testar as requisições pelo Swagger UI.
 
-_(inserir captura de tela aqui: `docs/evidencias/swagger.png`)_
+9. Evidências do projeto
+
+Nesta parte serão adicionadas capturas de tela para mostrar o funcionamento dos testes e da documentação.
+
+Testes automatizados
+
+Captura de tela da execução do comando npm test, mostrando o resultado dos testes.
+
+Arquivo: docs/evidencias/npm-test.png
+
+Documentação Swagger
+
+Captura de tela da documentação aberta no navegador pelo endereço /api-docs.
+
+Arquivo: docs/evidencias/swagger.png
+
+10. Considerações finais
+
+O desenvolvimento deste projeto ajudou a praticar a criação de APIs com Node.js e Express, o uso de rotas HTTP e o tratamento de erros.
+
+Também foi possível trabalhar com testes automatizados, documentação com Swagger e integração com uma API externa, utilizando os dados da NASA.
+
+O projeto reúne, na prática, alguns dos principais conteúdos estudados na unidade curricular Desenvolver Serviços Web.
